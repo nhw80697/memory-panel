@@ -1,0 +1,40 @@
+.bourd{
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(7, 13vh);
+    direction: rtl;
+    width: 50%;
+    margin: auto auto;
+
+    text-align: right;
+    font-size: 60%;
+    font-weight: bold;
+}
+
+.days{
+    border: solid;
+    border-width: 0.6px;
+    color: gray;
+    cursor: pointer;
+}
+
+.daysOfweek{
+    text-align: center;
+    align-self: end;
+    height: 4vh;
+}
+.days:hover{
+    background-color: blue;
+}
+
+.this-month{
+    color: black;
+}
+
+.select-div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 5vh;
+}
