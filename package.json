@@ -22,8 +22,12 @@
     "@hebcal/core": "^3.33.3",
     "@ng-bootstrap/ng-bootstrap": "^12.0.1",
     "@popperjs/core": "^2.10.2",
+    "@types/events": "^3.0.0",
     "bootstrap": "^5.1.3",
+    "events": "^3.3.0",
     "rxjs": "~7.4.0",
+    "stream": "^0.0.2",
+    "stream-browserify": "^3.0.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

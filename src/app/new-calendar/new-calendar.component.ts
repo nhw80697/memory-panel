@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { HebrewCalendar, HDate, Location, Event, HebrewDateEvent, months, gematriya } from '@hebcal/core';
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { HDate, gematriya } from '@hebcal/core';
 import { Month, MonthLeapYear, days } from '../month'
 
 @Component({
@@ -10,13 +11,18 @@ import { Month, MonthLeapYear, days } from '../month'
 export class NewCalendarComponent {
 
   today = new HDate();
-  thisMonth = this.today.getMonthName();
+  thisMonth: string | undefined;
   thisYear = this.today.getFullYear();
   allDaysInMonth: any = [];
   gematriya = gematriya;
   month: Array<any> = [];
   years: Array<any> = []
   days: Array<any> = days;
+
+  dayShowInModal: any = {
+    date: this.today,
+    message: ""
+  };
 
   checkIsLeapYear(year: number) {
     let hdate = new HDate(1, 1, year);
@@ -51,27 +57,30 @@ export class NewCalendarComponent {
     this.month = this.checkIsLeapYear(e.target.value);
   }
 
-  changeDate(year: number, month: any, day: number) {
+  changeDate(year: number, month: any, dayInMonth: number) {
     this.allDaysInMonth = []
 
-    this.today = new HDate(day, month, year);
+    this.today = new HDate(dayInMonth, month, year);
     this.thisMonth = this.today.getMonthName();
     this.thisYear = this.today.getFullYear();
     let lenMonth = this.today.daysInMonth();
 
     for (let d = 0; d < lenMonth; d++) {
-      let day = new HDate(d + 1, month, year);
+      let day = {
+        date: new HDate(d + 1, month, year),
+        message: localStorage.getItem(year + ',' + month + ',' + String(Number(d) + 1))
+      }
       this.allDaysInMonth.push(day)
     }
 
-    let theDayOnFirstDayInMonths = this.allDaysInMonth[0].getDay();
+    let theDayOnFirstDayInMonths = this.allDaysInMonth[0].date.getDay();
     for (; theDayOnFirstDayInMonths > 0; theDayOnFirstDayInMonths--) {
-      this.allDaysInMonth.unshift(this.allDaysInMonth[0].prev())
+      this.allDaysInMonth.unshift({ date: this.allDaysInMonth[0].date.prev(), message: "" })
     }
 
-    let theDayOnLastDayInMonths = this.allDaysInMonth[this.allDaysInMonth.length - 1].getDay();
+    let theDayOnLastDayInMonths = this.allDaysInMonth[this.allDaysInMonth.length - 1].date.getDay();
     for (; theDayOnLastDayInMonths < 6; theDayOnLastDayInMonths++) {
-      this.allDaysInMonth.push(this.allDaysInMonth[this.allDaysInMonth.length - 1].next())
+      this.allDaysInMonth.push({ date: this.allDaysInMonth[this.allDaysInMonth.length - 1].date.next(), message: "" })
     }
 
     for (let y = this.today.getFullYear() - 20; y <= this.today.getFullYear() + 20; y++) {
@@ -82,9 +91,15 @@ export class NewCalendarComponent {
 
   }
 
-  constructor() {
+  onSaveMessage(day: any) {
+    console.log(day);
+    let stringDate = day.date.getFullYear() + ',' + day.date.getMonth() + ',' + day.date.getDate();
+    localStorage.setItem(stringDate, day.message)
+  }
+
+  constructor(private router: Router) {
     let today = new HDate()
-    this.changeDate(today.getFullYear(), today.getMonth(), today.getDay())
+    this.changeDate(today.getFullYear(), today.getMonth(), today.getDate())
   }
 
 }

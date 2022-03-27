@@ -1,23 +1,41 @@
 <div class="select-div">
-    <select [(ngModel)]="thisYear" (change)="changeYear($event)" (change)="changeDate(thisYear,thisMonth,1)">
-        <option *ngFor="let y of years" value={{y}}>
-            {{gematriya(y)}}
-        </option>
-    </select>
     <select [(ngModel)]="thisMonth" (change)="changeDate(thisYear,thisMonth,1)">
         <option *ngFor="let mon of month" value={{mon.en}}>
             {{mon.he}}
         </option>
     </select>
+    <select [(ngModel)]="thisYear" (change)="changeYear($event)" (change)="changeDate(thisYear,thisMonth,1)">
+        <option *ngFor="let y of years" value={{y}}>
+            {{gematriya(y)}}
+        </option>
+    </select>
 </div>
 
 <div style="display: flex; align-items: center; justify-content: center;">
-    <button class="btn-sm btn-primary" (click)="nextMonth()"><i class="bi bi-arrow-left"></i></button>
     <button class="btn-sm btn-primary" (click)="lastMonth()"><i class="bi bi-arrow-right"></i></button>
+    <button class="btn-sm btn-primary" (click)="nextMonth()"><i class="bi bi-arrow-left"></i></button>
 </div>
 
 <div class="bourd">
     <div class="daysOfweek" *ngFor="let day of days">{{day}}</div>
-    <div class="days" *ngFor="let day of allDaysInMonth" [ngClass]="{'this-month':day.getMonthName()==thisMonth}">
-        {{gematriya(day.getDate())}}</div>
+    <div class="days" *ngFor="let day of allDaysInMonth" [ngClass]="{'this-month':day.date.getMonthName()==thisMonth}"
+        (click)="dayShowInModal = day" data-bs-toggle="modal" data-bs-target="#day">
+        {{gematriya(day.date.getDate())}} {{day.message}}</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="day" tabindex="-1" aria-labelledby="" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <app-day [day]="dayShowInModal"></app-day>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-sm btn-secondary" data-bs-dismiss="modal">סגור</button>
+                <button type="button" class="btn-sm btn-primary" (click)="onSaveMessage(dayShowInModal)"
+                    data-bs-dismiss="modal">שמור
+                    שינויים</button>
+            </div>
+        </div>
+    </div>
 </div>
