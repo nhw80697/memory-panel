@@ -31,7 +31,8 @@
                 <app-day [day]="dayShowInModal"></app-day>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn-sm btn-secondary" data-bs-dismiss="modal">סגור</button>
+                <button type="button" class="btn-sm btn-secondary" (click)="dayShowInModal.message = ''"
+                    data-bs-dismiss="modal">סגור</button>
                 <button type="button" class="btn-sm btn-primary" (click)="onSaveMessage(dayShowInModal)"
                     data-bs-dismiss="modal">שמור
                     שינויים</button>
