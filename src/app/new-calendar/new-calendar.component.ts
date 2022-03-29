@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { HDate, gematriya } from '@hebcal/core';
+import { HDate, HebrewCalendar, Event, gematriya } from '@hebcal/core';
 import { Month, MonthLeapYear, days } from '../month'
 
 @Component({
@@ -15,10 +15,12 @@ export class NewCalendarComponent {
   thisYear = this.today.getFullYear();
   allDaysInMonth: any = [];
   gematriya = gematriya;
+  hebrewCalendar = HebrewCalendar;
+  event = Event;
   month: Array<any> = [];
   years: Array<any> = []
   days: Array<any> = days;
-
+  flagsOfHolidays: Array<number> = [21, 524288, 2097168, 2097170, 256]
   dayShowInModal: any = {
     date: this.today,
     message: ""
@@ -68,7 +70,12 @@ export class NewCalendarComponent {
     for (let d = 0; d < lenMonth; d++) {
       let day = {
         date: new HDate(d + 1, month, year),
-        message: localStorage.getItem(year + ',' + month + ',' + String(Number(d) + 1))
+        message: localStorage.getItem(year + ',' + month + ',' + String(Number(d) + 1)),
+        holiday: this.hebrewCalendar.getHolidaysOnDate(new HDate(d + 1, month, year))
+      }
+      if (day.holiday) {
+        console.log(day.holiday[0].getDesc() + " --- " + day.holiday[0].getFlags())
+        day.holiday = day.holiday.filter(holiday => this.flagsOfHolidays.includes(holiday.getFlags()))
       }
       this.allDaysInMonth.push(day)
     }
@@ -100,6 +107,7 @@ export class NewCalendarComponent {
   constructor(private router: Router) {
     let today = new HDate()
     this.changeDate(today.getFullYear(), today.getMonth(), today.getDate())
+
   }
 
 }

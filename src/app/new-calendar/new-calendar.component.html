@@ -19,8 +19,13 @@
 <div class="bourd">
     <div class="daysOfweek" *ngFor="let day of days">{{day}}</div>
     <div class="days" *ngFor="let day of allDaysInMonth" [ngClass]="{'this-month':day.date.getMonthName()==thisMonth}"
-        (click)="dayShowInModal = day" data-bs-toggle="modal" data-bs-target="#day">
-        {{gematriya(day.date.getDate())}} {{day.message}}</div>
+        [ngStyle]="{'background-color':  day.date.getDay() == 6 ? 'yellow' : 'white'}" (click)="dayShowInModal = day"
+        data-bs-toggle="modal" data-bs-target="#day">
+        {{gematriya(day.date.getDate())}}
+        <p *ngIf="day.holiday && day.holiday.length > 0">
+            {{day.holiday[0].render('he-x-NoNikud')}}</p>
+        <p style="font-weight: 100;">{{day.message}}</p>
+    </div>
 </div>
 
 <!-- Modal -->
